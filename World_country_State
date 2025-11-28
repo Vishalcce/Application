@@ -1,0 +1,111 @@
+// World -- Country -- State
+import java.util.*;
+class Main {
+    static Scanner s = new Scanner(System.in);
+    public static void main(String[] args) {
+        Node world = new Node("world",0);
+        while(true){
+            System.out.println("Enter the choice: ");
+            System.out.println("1. Add Element : ");
+            System.out.println("2. Print Element : ");
+            System.out.println("3. Exit : ");
+            System.out.println();
+            System.out.println("Enter your choice : ");
+            int choice = s.nextInt();
+            s.nextLine();
+            switch(choice){
+                case 1:
+                    addCountry(world);
+                    break;
+                case 2:
+                    print_ele(world);
+                    break;
+                case 3:
+                    System.out.println("Exiting. . . . .");
+                    break;
+                default:
+                    System.out.println("Invalid Choice , Try again....");
+            }
+        }
+    }
+    public static void print_ele(Node world){
+        Stack<Node> st = new Stack<>();
+        st.push(world);
+        while(!st.isEmpty()){
+            Node temp = st.pop();
+            System.out.print("\t".repeat(temp.lvl));
+            System.out.println(temp.name);
+            for(Node i:temp.list){
+                st.push(i);
+            }
+        }
+    }
+    public static void addCountry(Node world){
+        System.out.println("Enter the Parent Node: ");
+        String parent = s.nextLine();
+        parent = parent.toLowerCase();
+        System.out.println("Enter the Child Node: ");
+        String child = s.nextLine().toLowerCase();
+        if(parent.equals(world.name)){
+            if(world.isContains(child)){
+                System.out.println("Child is already Present . .. ");
+                return;
+            }
+            world.add(child);
+        }
+        else{
+            Node search = bfs(parent,world);
+            if(search == null){
+                System.out.println("Parent Node is not found . . .. ");
+                return;
+            }
+            search.add(child);
+        }
+        System.out.println("Element added successfully . . . ");
+    }
+    public static Node bfs(String str,Node world){
+        Queue<Node> q = new LinkedList<>();
+        q.add(world);
+        while(!q.isEmpty()){
+            Node temp = q.poll();
+            if(temp.name.equals(str)){
+                return temp;
+            }
+            for(Node i:temp.list){
+                if(i.name.equals(str)){
+                    return i;
+                }
+                q.add(i);
+            }
+        }
+        return null;
+    }
+}
+class Node{
+    String name;
+    Set<Node> list;
+    int lvl;
+    Node(String name,int lvl){
+        this.name = name;
+        this.lvl = lvl;
+        list = new HashSet<>();
+    }
+    public String getName(){
+        return this.name;
+    }
+    public List<Node> getList(){
+        return new ArrayList<>(list);
+    }
+    public boolean add(String ele){
+        if(this.isContains(ele)){
+            return false;
+        }
+        return list.add(new Node(ele.toLowerCase(),this.lvl+1));
+    }
+    public boolean isContains(String str){
+        for(Node i:list){
+            if(i.name.equals(str)) return true;
+        }
+        return false;
+    }
+}
