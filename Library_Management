@@ -1,0 +1,178 @@
+import java.util.*;
+
+
+class Main{
+	static Scanner s = new Scanner(System.in);
+	public static void main(String args[]){	
+		int n = s.nextInt();
+	}
+}
+
+class LibrarySer{
+	ArrayList<Book> arr = new ArrayList<>();
+	ArrayList<student> stu = new ArrayList<>();
+	Map<student,List<Book>> map = new HashMap<>();
+
+	public void add_books(){
+		System.out.println("Enter the Book_id : ");
+		int id = s.nextInt();
+		s.nextLine();
+		System.out.println("Enter the title : ");
+		String name = s.nextLine();
+		System.out.println("Enter the author : ");
+		String author = s.nextLine();
+		System.out.println("Total Copies : ");
+		int copy = s.nextInt();
+		Book b1 = new Book(id,name,author,copy,copy);
+		System.out.println("Book :"+name+" has been successfully added");
+	}
+
+	public void remove_books(){
+		System.out.println("Enter the name : ");
+		String name = s.nextLine();
+		for(Book i:arr){
+			if(i.name.isEquals(name)){
+				arr.remove(name);
+				System.out.println("The Book : "+name+"Succussfully removed");
+				return;
+			}
+		}
+		System.out.println("Book Doesn't Exits");
+	}
+
+	public void view_books(){
+		for(Book i:arr){
+			System.out.println(i.get_book_id() +" "+ i.get_title() +" "+ i.get_author() +" "+ i.get_copy() +" "+ i.get_ava_copy());
+		}
+	}
+
+	public boolean  search_author(String name){
+		for(Book i:arr){
+			if(i.get_author.isEqual(name)) return true;
+		}
+		return false;
+	}
+
+	public Boolean search_title(String title){
+		for(Book i:arr){
+			if(i.get_title.isEqual(title)) return true;
+		}
+		return false;
+	}
+
+	public void add_stu(){
+		System.out.println("Enter the student id : ");
+		int id = s.nextInt();
+		s.nextLine();
+		System.out.println("Enter the student name : ");
+		String name = s.nextLine();
+		student s1 = new student(id,name,3);
+		System.out.println("Student successfully added... ");
+	}
+
+	public void remove_stu(){
+		System.out.println("Enter the Student ID : ");
+		int id = s.nextInt();
+		for(student i:stu){
+			if(i.id == id){
+				stu.remove(i);
+				System.out.println("Student Successfully removed. . . ");
+				return;
+			}
+		}
+		System.out.println("ID doesn't exist");
+	}
+
+	public void view_stu(){
+		for(student i:stu){
+			System.out.println(i.get_stu_id() +" "+ i.get_name() +" "+ i.get_borrowedBooks());
+		}
+	}
+
+	public Book search_Book_id(int id){
+		for(Book i: arr){
+			if (i.id== id){
+				return i;
+			}
+		}
+		return null;
+	}
+
+	public student search_stu_id(int id){
+		for(student i: stu){	
+			if(i.get_stu_id == id) return i;
+		}
+		return null;
+	}
+	
+	public void Borrow_book(){
+		System.out.println("Enter the Book ID : ");
+		int book_id = s.nextInt();
+		System.out.println("Enter the Student ID : ");
+		int stu_id = s.nextInt();
+		s.nextLine();
+		Book  book = search_Book_id(book_id);
+		student st = search_stu_id(stu_id);
+		if(book==null){
+			System.out.println("INVALID BOOK ID");
+			return;
+		}
+		if(st == null){
+			System.out.println("INVALID STUDENT ID");
+			return;
+		}
+		map.computeIfAbsent(st, e -> new ArrayList<>()).add(book);
+		
+}
+
+class student{
+	private int student_id;
+	private String name;
+	private int borrowedBooks;
+	student(student_id,name,borrowedBooks){
+		this.student_id = student_id;
+		this.name = name;
+		this.borrowedBooks = borrowedBooks;
+	}
+	public int get_stu_id(){
+		return this.student_id;
+	}
+	public String get_name(){
+		return this.name;
+	}
+	public int borrowedBooks(){
+		return this.borrowedBooks;
+	}
+}
+
+
+class Book{
+	private int book_id;
+	private String title;
+	private String author;
+	private int copy;
+	private int available_copy;
+	Book(int book_id,String title,String author,int copy,int available_copy){
+		this.book_id = book_id;
+		this.title = title;
+		this.author = author;
+		this.copy = copy;
+		this.available_copy = available_copy;
+	}
+	public int  get_book_id(){
+		return this.book_id;
+	}
+	public String get_title(){
+		return this.title;
+	}
+	public String get_author(){
+		return this.author;
+	}
+	public int get_copy(){
+		return this.copy;
+	}
+	public int get_ava_copy(){
+		return this.available_copy;
+	}
+	
+}
